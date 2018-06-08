@@ -1,5 +1,5 @@
 {
-    "name": "zendframework/zend-mvc",
+    "name": "webino/zend-mvc",
     "description": "Zend Framework's event-driven MVC layer, including MVC Applications, Controllers, and Plugins",
     "license": "BSD-3-Clause",
     "keywords": [
@@ -14,6 +14,9 @@
         "rss": "https://github.com/zendframework/zend-mvc/releases.atom",
         "slack": "https://zendframework-slack.herokuapp.com",
         "forum": "https://discourse.zendframework.com/c/questions/components"
+    },
+    "replace": {
+        "zendframework/zend-mvc": "self.version"
     },
     "require": {
         "container-interop/container-interop": "^1.2",
