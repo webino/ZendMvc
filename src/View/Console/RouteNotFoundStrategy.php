@@ -152,13 +152,12 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
         $banner = $this->getConsoleBanner($console, $mm);
 
         // Get application usage information
-        $usage = $this->getConsoleUsage($console, $scriptName, $mm);
+        $usage = $this->getConsoleUsage($console, $scriptName, $mm, $e);
 
         // Inject the text into view
-        $result  = $banner ? rtrim($banner, "\r\n")        : '';
-        $result .= $usage  ? "\n\n" . trim($usage, "\r\n") : '';
-        $result .= "\n"; // to ensure we output a final newline
-        $result .= $this->reportNotFoundReason($e);
+        $result  = $banner ? rtrim($banner, "\r\n") : '';
+        $result .= $usage  ? "\n" . trim($usage, "\r\n") : '';
+        $result .= "\n" . $this->reportNotFoundReason($e) . "\n";
         $model->setResult($result);
 
         // Inject the result into MvcEvent
@@ -204,7 +203,7 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
          * Handle an application with no defined banners
          */
         if (!count($banners)) {
-            return sprintf("Zend Framework %s application\nUsage:\n", Version::VERSION);
+            return '';
         }
 
         /*
@@ -216,16 +215,17 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
     /**
      * Build Console usage information by querying currently loaded modules.
      *
-     * @param ConsoleAdapter         $console
-     * @param string                 $scriptName
+     * @param ConsoleAdapter $console
+     * @param string $scriptName
      * @param ModuleManagerInterface $moduleManager
+     * @param MvcEvent $e
      * @return string
-     * @throws RuntimeException
      */
     protected function getConsoleUsage(
         ConsoleAdapter $console,
         $scriptName,
-        ModuleManagerInterface $moduleManager = null
+        ModuleManagerInterface $moduleManager = null,
+        MvcEvent $e
     ) {
         /*
          * Loop through all loaded modules and collect usage info
@@ -252,7 +252,7 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
 
                 $moduleName = $console->colorize($moduleName, ColorInterface::RED);
 
-                $usage = $module->getConsoleUsage($console);
+                $usage = $module->getConsoleUsage($console, $e);
 
                 // Normalize what we got from the module or discard
                 if (is_array($usage) && !empty($usage)) {
@@ -445,6 +445,13 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
         if (!$this->displayNotFoundReason()) {
             return '';
         }
+
+        /** @var ConsoleRequest $request */
+        $request = $e->getParam('request');
+        if ($request && !count($request->getParams())) {
+            return '';
+        }
+
         $exception = $e->getParam('exception', false);
         if (!$exception && !$this->reason) {
             return '';
@@ -454,7 +461,7 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
         $reasons   = [
             Application::ERROR_CONTROLLER_NOT_FOUND => 'Could not match to a controller',
             Application::ERROR_CONTROLLER_INVALID   => 'Invalid controller specified',
-            Application::ERROR_ROUTER_NO_MATCH      => 'Invalid arguments or no arguments provided',
+            Application::ERROR_ROUTER_NO_MATCH      => 'Invalid arguments provided',
             'unknown'                               => 'Unknown',
         ];
         $report = sprintf("\nReason for failure: %s\n", $reasons[$reason]);
