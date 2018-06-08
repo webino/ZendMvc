@@ -1,5 +1,5 @@
 {
-    "name": "zendframework/zend-mvc",
+    "name": "webino/zend-mvc",
     "description": " ",
     "license": "BSD-3-Clause",
     "keywords": [
@@ -11,6 +11,9 @@
         "psr-4": {
             "Zend\\Mvc\\": "src/"
         }
+    },
+    "replace": {
+      "zendframework/zend-mvc": "self.version"
     },
     "require": {
         "php": "^5.5 || ^7.0",
