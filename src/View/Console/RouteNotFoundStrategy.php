@@ -437,7 +437,7 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
     /**
      * Report the 404 reason and/or exceptions
      *
-     * @param  \Zend\EventManager\EventInterface $e
+     * @param  \Zend\Mvc\MvcEvent $e
      * @return string
      */
     protected function reportNotFoundReason($e)
@@ -447,12 +447,12 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
         }
 
         /** @var ConsoleRequest $request */
-        $request = $e->getParam('request');
+        $request = $e->getRequest();
         if ($request && !count($request->getParams())) {
             return '';
         }
 
-        $exception = $e->getParam('exception', false);
+        $exception = $e->getException();
         if (!$exception && !$this->reason) {
             return '';
         }

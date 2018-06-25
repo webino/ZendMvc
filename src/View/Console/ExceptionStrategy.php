@@ -179,7 +179,7 @@ EOT;
             case Application::ERROR_EXCEPTION:
             default:
                 // Prepare error message
-                $exception = $e->getParam('exception');
+                $exception = $e->getException();
 
                 if (is_callable($this->message)) {
                     $callback = $this->message;

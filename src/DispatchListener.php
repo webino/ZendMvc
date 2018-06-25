@@ -95,7 +95,7 @@ class DispatchListener extends AbstractListenerAggregate
             $e->setError($application::ERROR_EXCEPTION)
                   ->setController($controllerName)
                   ->setControllerClass(get_class($controller))
-                  ->setParam('exception', $ex);
+                  ->setException($ex);
             $results = $events->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $e);
             $return = $results->last();
             if (! $return) {
@@ -112,7 +112,7 @@ class DispatchListener extends AbstractListenerAggregate
     public function reportMonitorEvent(MvcEvent $e)
     {
         $error     = $e->getError();
-        $exception = $e->getParam('exception');
+        $exception = $e->getException();
         if ($exception instanceof \Exception) {
             zend_monitor_custom_event_ex($error, $exception->getMessage(), 'Zend Framework Exception', ['code' => $exception->getCode(), 'trace' => $exception->getTraceAsString()]);
         }
@@ -157,7 +157,7 @@ class DispatchListener extends AbstractListenerAggregate
               ->setController($controllerName)
               ->setControllerClass('invalid controller class or alias: ' . $controllerName);
         if ($exception !== null) {
-            $event->setParam('exception', $exception);
+            $event->setException($exception);
         }
 
         $events  = $application->getEventManager();
@@ -213,7 +213,7 @@ class DispatchListener extends AbstractListenerAggregate
     ) {
         $event->setError($application::ERROR_EXCEPTION)
               ->setController($controllerName)
-              ->setParam('exception', $exception);
+              ->setException($exception);
 
         $events  = $application->getEventManager();
         $results = $events->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $event);

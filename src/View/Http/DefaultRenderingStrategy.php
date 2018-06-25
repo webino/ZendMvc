@@ -109,7 +109,7 @@ class DefaultRenderingStrategy extends AbstractListenerAggregate
             $application = $e->getApplication();
             $events      = $application->getEventManager();
             $e->setError(Application::ERROR_EXCEPTION)
-              ->setParam('exception', $ex);
+              ->setException($ex);
             $events->trigger(MvcEvent::EVENT_RENDER_ERROR, $e);
         }
 

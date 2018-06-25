@@ -257,6 +257,28 @@ class MvcEvent extends Event
     }
 
     /**
+     * Set an exception
+     *
+     * @param  \Throwable $exc
+     * @return MvcEvent
+     */
+    public function setException($exc)
+    {
+        $this->setParam('exception', $exc);
+        return $this;
+    }
+
+    /**
+     * Retrieve an exception, if any
+     *
+     * @return \Throwable|null
+     */
+    public function getException()
+    {
+        return $this->getParam('exception', null);
+    }
+
+    /**
      * Get the currently registered controller name
      *
      * @return string

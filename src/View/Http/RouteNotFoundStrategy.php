@@ -249,7 +249,7 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
 
         $model->setVariable('display_exceptions', true);
 
-        $exception = $e->getParam('exception', false);
+        $exception = $e->getException();
         if (!$exception instanceof \Exception) {
             return;
         }

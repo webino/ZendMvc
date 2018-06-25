@@ -120,7 +120,7 @@ class ExceptionStrategy extends AbstractListenerAggregate
             default:
                 $model = new ViewModel([
                     'message'            => 'An error occurred during execution; please try again later.',
-                    'exception'          => $e->getParam('exception'),
+                    'exception'          => $e->getException(),
                     'display_exceptions' => $this->displayExceptions(),
                 ]);
                 $model->setTemplate($this->getExceptionTemplate());
