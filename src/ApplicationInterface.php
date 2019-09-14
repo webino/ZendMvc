@@ -14,6 +14,14 @@ use Zend\EventManager\EventsCapableInterface;
 interface ApplicationInterface extends EventsCapableInterface
 {
     /**
+     * Returns entry from a service manager
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function get($name);
+
+    /**
      * Get the locator object
      *
      * @return \Zend\ServiceManager\ServiceLocatorInterface

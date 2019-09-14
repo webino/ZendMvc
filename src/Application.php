@@ -199,6 +199,17 @@ class Application implements
     }
 
     /**
+     * Returns entry from a service manager
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function get($name)
+    {
+        return $this->getServiceManager()->get($name);
+    }
+
+    /**
      * Set the event manager instance
      *
      * @param  EventManagerInterface $eventManager
