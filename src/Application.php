@@ -334,8 +334,7 @@ class Application implements
             return $this;
         }
 
-        $response = $this->response;
-        $event->setResponse($response);
+        $this->response = $event->getResponse();
         $this->completeRequest($event);
 
         return $this;
